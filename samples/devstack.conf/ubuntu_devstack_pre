@@ -1,0 +1,26 @@
+cp /etc/apt/sources.list /etc/apt/sources.list.bak
+echo "deb http://mirrors.aliyun.com/ubuntu/ trusty main restricted universe multiverse" > /etc/apt/sources.list
+echo "deb http://mirrors.aliyun.com/ubuntu/ trusty-security main restricted universe multiverse" >> /etc/apt/sources.list
+echo "deb http://mirrors.aliyun.com/ubuntu/ trusty-updates main restricted universe multiverse" >> /etc/apt/sources.list
+echo "deb http://mirrors.aliyun.com/ubuntu/ trusty-proposed main restricted universe multiverse" >> /etc/apt/sources.list
+echo "deb http://mirrors.aliyun.com/ubuntu/ trusty-backports main restricted universe multiverse" >> /etc/apt/sources.list
+echo "deb-src http://mirrors.aliyun.com/ubuntu/ trusty main restricted universe multiverse" >> /etc/apt/sources.list
+echo "deb-src http://mirrors.aliyun.com/ubuntu/ trusty-security main restricted universe multiverse" >> /etc/apt/sources.list
+echo "deb-src http://mirrors.aliyun.com/ubuntu/ trusty-updates main restricted universe multiverse" >> /etc/apt/sources.list
+echo "deb-src http://mirrors.aliyun.com/ubuntu/ trusty-proposed main restricted universe multiverse" >> /etc/apt/sources.list
+echo "deb-src http://mirrors.aliyun.com/ubuntu/ trusty-backports main restricted universe multiverse" >> /etc/apt/sources.list
+apt-get update
+ntpdate ntp.sjtu.edu.cn
+apt-get -y install git
+umount /run/user/1000/gvfs
+cd /home
+git clone http://git.trystack.cn/openstack-dev/devstack -b stable/newton
+cd /home/devstack/tools/
+./create-stack-user.sh
+cp /home/trystack/local.conf /home/devstack/
+cp /home/trystack/cirros-0.3.4-x86_64-uec.tar.gz /home/devstack/files
+echo "pip<8" > /home/devstack/tools/cap-pip.txt
+chown -R stack:stack /home/devstack
+chmod 777 /dev/pts/0
+su stack
+cd /home/devstack
